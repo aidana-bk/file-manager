@@ -1,13 +1,14 @@
-import path from "path";
 import { fileOperations } from "./fs.js";
+import path from "path";
+import os from "os";
 
-const filePath = path.join(import.meta.dirname);
-function printDir() {
-  console.log(`\nYou are currently in ${filePath}`);
+function printDir(currentDir) {
+  console.log(`\nYou are currently in ${currentDir}`);
 }
 
-export function cliFileManager(rl, username) {
-  printDir();
+export function cliFileManager(rl, username, filePath) {
+  let currentDir = filePath;
+  printDir(currentDir);
 
   rl.setPrompt("> ");
   rl.prompt();
@@ -17,25 +18,45 @@ export function cliFileManager(rl, username) {
     try {
       switch (cmd) {
         case "up":
-          console.log("up");
+          const parent = path.dirname(currentDir);
+          if (parent.length >= os.homedir().length) currentDir = parent;
           break;
 
         case "cd":
-          console.log("cd");
+          await fileOperations.cd(args[0], currentDir, (newPath) => {
+            currentDir = newPath;
+          });
           break;
 
         case "ls":
-          await fileOperations.ls(filePath);
+          await fileOperations.ls(currentDir);
           break;
 
         case "cat":
+          break;
+
         case "add":
-        case "rn":
-        case "cp":
-        case "mv":
-        case "rm":
+          console.log("add");
+          break;
+
         case "mkdir":
-          console.log("fs");
+          console.log("mkdir");
+          break;
+
+        case "rn":
+          console.log("rn");
+          break;
+
+        case "cp":
+          console.log("cp");
+          break;
+
+        case "mv":
+          console.log("mv");
+          break;
+
+        case "rm":
+          console.log("rm");
           break;
 
         case "os":
@@ -67,7 +88,7 @@ export function cliFileManager(rl, username) {
       console.log("Operation failed");
     }
 
-    printDir();
+    printDir(currentDir);
     rl.prompt();
   });
 
