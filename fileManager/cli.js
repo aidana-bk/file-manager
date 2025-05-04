@@ -1,5 +1,6 @@
 import { fileOperations } from "./fs.js";
 import { calculateHash } from "./hash.js";
+import { zipOperations } from "./zip.js";
 import path from "path";
 import os from "os";
 
@@ -70,11 +71,11 @@ export function cliFileManager(rl, username, filePath) {
           break;
 
         case "compress":
-          console.log("compress");
+          await zipOperations.compress(args[0], args[1], currentDir);
           break;
 
         case "decompress":
-          console.log("decompress");
+          await zipOperations.decompress(args[0], args[1], currentDir);
           break;
 
         case ".exit":
