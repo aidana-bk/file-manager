@@ -37,15 +37,15 @@ export function cliFileManager(rl, username, filePath) {
           break;
 
         case "add":
-          console.log("add");
+          await fileOperations.add(args[0], currentDir);
           break;
 
         case "mkdir":
-          console.log("mkdir");
+          await fileOperations.mkdir(args[0], currentDir);
           break;
 
         case "rn":
-          console.log("rn");
+          await fileOperations.rn(args[0], args[1], currentDir);
           break;
 
         case "cp":

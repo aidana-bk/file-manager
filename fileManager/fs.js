@@ -40,4 +40,20 @@ export const fileOperations = {
       stream.pipe(process.stdout);
     });
   },
+
+  async add(filename, currentDir) {
+    const filePath = path.resolve(currentDir, filename);
+    await fs.writeFile(filePath, "");
+  },
+
+  async mkdir(dirName, currentDir) {
+    const fullPath = path.resolve(currentDir, dirName);
+    await fs.mkdir(fullPath, { recursive: false });
+  },
+
+  async rn(oldPath, newName, currentDir) {
+    const oldFile = path.resolve(currentDir, oldPath);
+    const newFile = path.join(path.dirname(oldFile), newName);
+    await fs.rename(oldFile, newFile);
+  },
 };
