@@ -49,11 +49,11 @@ export function cliFileManager(rl, username, filePath) {
           break;
 
         case "cp":
-          console.log("cp");
+          await fileOperations.cp(args[0], args[1], currentDir);
           break;
 
         case "mv":
-          console.log("mv");
+          await fileOperations.mv(args[0], args[1], currentDir);
           break;
 
         case "rm":

@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { createReadStream } from "fs";
+import { createReadStream, createWriteStream } from "fs";
 import path from "path";
 
 export const fileOperations = {
@@ -63,6 +63,40 @@ export const fileOperations = {
       await fs.unlink(fullPath);
     } catch (err) {
       console.log(err);
+    }
+  },
+
+  async cp(srcPath, destDir, currentDir) {
+    try {
+      const source = path.resolve(currentDir, srcPath);
+      const destFolder = path.resolve(currentDir, destDir);
+      const dest = path.join(destFolder, path.basename(srcPath));
+      return await new Promise((resolve, reject) => {
+        const readStream = createReadStream(source);
+        const writeStream = createWriteStream(dest);
+        readStream.on("error", (err) => {
+          reject(err);
+        });
+        writeStream.on("error", (err) => {
+          reject(err);
+        });
+        writeStream.on("finish", resolve);
+        readStream.pipe(writeStream);
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  },
+
+  async mv(srcPath, destDir, currentDir) {
+    const source = path.resolve(currentDir, srcPath);
+    const dest = path.resolve(currentDir, destDir, path.basename(srcPath));
+
+    try {
+      await this.cp(srcPath, destDir, currentDir);
+      await fs.unlink(source);
+    } catch (err) {
+      throw new Error("Operation failed");
     }
   },
 };
