@@ -1,6 +1,8 @@
 import { fileOperations } from "./fs.js";
 import { calculateHash } from "./hash.js";
 import { zipOperations } from "./zip.js";
+import { osOperations } from "./os.js";
+
 import path from "path";
 import os from "os";
 
@@ -63,7 +65,7 @@ export function cliFileManager(rl, username, filePath) {
           break;
 
         case "os":
-          console.log("os");
+          await osOperations(args[0]);
           break;
 
         case "hash":
