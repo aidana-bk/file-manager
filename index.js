@@ -5,7 +5,7 @@ import { cliFileManager } from "./fileManager/cli.js";
 const usernameArg = process.argv.find((arg) => arg.startsWith("--username="));
 const username = usernameArg ? usernameArg.split("=")[1] : "Username";
 
-console.log(`Welcome to the File Manager, ${username}!\n`);
+console.log(`Welcome to the File Manager, ${username}!`);
 
 const rl = readline.createInterface({
   input: process.stdin,

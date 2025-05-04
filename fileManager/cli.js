@@ -57,7 +57,7 @@ export function cliFileManager(rl, username, filePath) {
           break;
 
         case "rm":
-          console.log("rm");
+          await fileOperations.rm(args[0], currentDir);
           break;
 
         case "os":

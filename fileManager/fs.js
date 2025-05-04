@@ -56,4 +56,13 @@ export const fileOperations = {
     const newFile = path.join(path.dirname(oldFile), newName);
     await fs.rename(oldFile, newFile);
   },
+
+  async rm(filePath, currentDir) {
+    const fullPath = path.resolve(currentDir, filePath);
+    try {
+      await fs.unlink(fullPath);
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };
