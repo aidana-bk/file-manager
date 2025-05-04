@@ -33,6 +33,7 @@ export function cliFileManager(rl, username, filePath) {
           break;
 
         case "cat":
+          await fileOperations.cat(args[0], currentDir);
           break;
 
         case "add":

@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import { createReadStream } from "fs";
 import path from "path";
 
 export const fileOperations = {
@@ -24,5 +25,19 @@ export const fileOperations = {
     } catch {
       console.log("Operation failed");
     }
+  },
+
+  async cat(filePath, currentDir) {
+    const fullPath = path.resolve(currentDir, filePath);
+    return new Promise((resolve, reject) => {
+      const stream = createReadStream(fullPath, { encoding: "utf-8" });
+      stream.on("error", (err) => {
+        reject(err);
+      });
+      stream.on("end", () => {
+        resolve();
+      });
+      stream.pipe(process.stdout);
+    });
   },
 };
