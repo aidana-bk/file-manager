@@ -1,9 +1,9 @@
-import os from "os";
+import path from "path";
+import { fileOperations } from "./fs.js";
 
-let currentDir = os.homedir();
-
+const filePath = path.join(import.meta.dirname);
 function printDir() {
-  console.log(`\nYou are currently in ${currentDir}`);
+  console.log(`\nYou are currently in ${filePath}`);
 }
 
 export function cliFileManager(rl, username) {
@@ -25,7 +25,7 @@ export function cliFileManager(rl, username) {
           break;
 
         case "ls":
-          console.log("ls");
+          await fileOperations.ls(filePath);
           break;
 
         case "cat":
