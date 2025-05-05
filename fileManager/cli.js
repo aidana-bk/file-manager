@@ -1,0 +1,104 @@
+import { fileOperations } from "./fs.js";
+import { calculateHash } from "./hash.js";
+import { zipOperations } from "./zip.js";
+import { osOperations } from "./os.js";
+
+import path from "path";
+import os from "os";
+
+function printDir(currentDir) {
+  console.log(`\nYou are currently in ${currentDir}`);
+}
+
+export function cliFileManager(rl, username, filePath) {
+  let currentDir = filePath;
+  printDir(currentDir);
+
+  rl.setPrompt("> ");
+  rl.prompt();
+
+  rl.on("line", async (line) => {
+    const [cmd, ...args] = line.trim().split(" ");
+    try {
+      switch (cmd) {
+        case "up":
+          const parent = path.dirname(currentDir);
+          if (parent.length >= os.homedir().length) currentDir = parent;
+          break;
+
+        case "cd":
+          await fileOperations.cd(args[0], currentDir, (newPath) => {
+            currentDir = newPath;
+          });
+          break;
+
+        case "ls":
+          await fileOperations.ls(currentDir);
+          break;
+
+        case "cat":
+          await fileOperations.cat(args[0], currentDir);
+          break;
+
+        case "add":
+          await fileOperations.add(args[0], currentDir);
+          break;
+
+        case "mkdir":
+          await fileOperations.mkdir(args[0], currentDir);
+          break;
+
+        case "rn":
+          await fileOperations.rn(args[0], args[1], currentDir);
+          break;
+
+        case "cp":
+          await fileOperations.cp(args[0], args[1], currentDir);
+          break;
+
+        case "mv":
+          await fileOperations.mv(args[0], args[1], currentDir);
+          break;
+
+        case "rm":
+          await fileOperations.rm(args[0], currentDir);
+          break;
+
+        case "os":
+          await osOperations(args[0]);
+          break;
+
+        case "hash":
+          await calculateHash(args[0], currentDir);
+          break;
+
+        case "compress":
+          await zipOperations.compress(args[0], args[1], currentDir);
+          break;
+
+        case "decompress":
+          await zipOperations.decompress(args[0], args[1], currentDir);
+          break;
+
+        case ".exit":
+          console.log(
+            `\nThank you for using File Manager, ${username}, goodbye!`
+          );
+          process.exit(0);
+
+        default:
+          console.log("Invalid input");
+      }
+    } catch (e) {
+      console.log("Operation failed");
+    }
+
+    printDir(currentDir);
+    rl.prompt();
+  });
+
+  rl.on("SIGINT", () => {
+    console.log(`\nThank you for using File Manager, ${username}, goodbye!`);
+    process.exit(0);
+  });
+}
